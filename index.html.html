@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Package Tracker</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f0f2f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .card { background: white; padding: 2.5rem; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 90%; max-width: 500px; text-align: center; }
+        
+        input { width: 100%; padding: 15px; margin-bottom: 15px; border: 2px solid #eee; border-radius: 8px; box-sizing: border-box; font-size: 1rem; transition: border-color 0.3s; }
+        input:focus { border-color: #3498db; outline: none; }
+        
+        button { background-color: #3498db; color: white; border: none; padding: 15px 30px; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: bold; width: 100%; }
+        button:hover { background-color: #2980b9; }
+
+        /* Stepper/Progress Bar Styles */
+        .stepper { display: flex; justify-content: space-between; margin: 30px 0; position: relative; }
+        .step { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; width: 33%; }
+        .circle { width: 30px; height: 30px; border-radius: 50%; background: #ddd; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; margin-bottom: 8px; }
+        .label { font-size: 0.75rem; color: #888; }
+        
+        /* Active States */
+        .step.completed .circle { background: #2ecc71; }
+        .step.active .circle { background: #3498db; box-shadow: 0 0 10px rgba(52, 152, 219, 0.5); }
+        .step.active .label { color: #3498db; font-weight: bold; }
+
+        /* Connecting Line */
+        .line { position: absolute; top: 15px; left: 15%; width: 70%; height: 2px; background: #eee; z-index: 1; }
+        .line-progress { position: absolute; top: 0; left: 0; width: 50%; height: 100%; background: #2ecc71; }
+
+        #loader { display: none; border: 4px solid #f3f3f3; border-top: 4px solid #3498db; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 20px auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        #status-area { display: none; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <div id="input-section">
+        <h2 style="margin-top:0">Package Tracking</h2>
+        <p style="color: #666;">Enter your tracking number to see delivery status.</p>
+        <input type="text" id="trackInput" placeholder="e.g. #123456789">
+        <button onclick="startTracking()">Locate Shipment</button>
+    </div>
+
+    <div id="loader"></div>
+
+    <div id="status-area">
+        <h3 style="color:#2c3e50">Package: <span id="display-code" style="color:#3498db"></span></h3>
+        
+        <div class="stepper">
+            <div class="line"><div class="line-progress"></div></div>
+            <div class="step completed">
+                <div class="circle">✓</div>
+                <div class="label">Ordered</div>
+            </div>
+            <div class="step active">
+                <div class="circle">🚚</div>
+                <div class="label">In Transit</div>
+            </div>
+            <div class="step">
+                <div class="circle">📍</div>
+                <div class="label">Destination</div>
+            </div>
+        </div>
+
+        <div style="background: #e1f5fe; padding: 15px; border-radius: 8px; text-align: left;">
+            <strong style="color: #0277bd;">Latest Update:</strong>
+            <p style="margin: 5px 0; font-size: 0.95rem;">Your package is on its way and will soon get to the destination.</p>
+        </div>
+        <button onclick="location.reload()" style="margin-top: 20px; background: #95a5a6;">New Search</button>
+    </div>
+</div>
+
+<script>
+    function startTracking() {
+        const val = document.getElementById('trackInput').value;
+        if(!val) return alert("Please enter a code.");
+
+        document.getElementById('input-section').style.display = 'none';
+        document.getElementById('loader').style.display = 'block';
+
+        setTimeout(() => {
+            document.getElementById('loader').style.display = 'none';
+            document.getElementById('status-area').style.display = 'block';
+            document.getElementById('display-code').innerText = val;
+        }, 1500);
+    }
+</script>
+
+</body>
+</html>
